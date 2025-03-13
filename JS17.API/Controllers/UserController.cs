@@ -1,6 +1,9 @@
-﻿using JS17.API.Persistence;
+﻿using AutoMapper;
+using JS17.API.Models.Dtos;
+using JS17.API.Persistence;
 using JS17.API.Persistence.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace JS17.API.Controllers;
@@ -9,10 +12,12 @@ namespace JS17.API.Controllers;
 [Route("api/[controller]/[action]")]
 public class UserController : ControllerBase
 {
+    private readonly IMapper _mapper;
     private readonly WebDbContext _dbContext;
 
-    public UserController(WebDbContext dbContext)
+    public UserController(IMapper mapper, WebDbContext dbContext)
     {
+        _mapper = mapper;
         _dbContext = dbContext;
     }
 
@@ -44,7 +49,6 @@ public class UserController : ControllerBase
         return Ok(token);
     }
 
-    [HttpGet]
     public IActionResult Login([FromQuery] string email, [FromQuery] string password)
     {
         if(!_dbContext.Users.Any(x => x.Email == email))
@@ -69,7 +73,20 @@ public class UserController : ControllerBase
 
         return Ok(token);
     }
+    
+    [HttpGet]
+    public IActionResult GetProfile([FromQuery] string token)
+    {
+        if(!_dbContext.UserTokens.Any(x => x.Token == token))
+        {
+            return BadRequest("token not valid");
+        }
 
+        var user = _dbContext.UserTokens.Include(x => x.User).First(x => x.Token == token).User;
+        var userDto = _mapper.Map<UserDto>(user);
+
+        return Ok(userDto);
+    }
 
     public static string GenerateToken(string email, string password)
     {

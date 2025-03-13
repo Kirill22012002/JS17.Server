@@ -1,3 +1,4 @@
+using JS17.API.Models;
 using JS17.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(x => x.AddProfile<MappingProfile>());
 
 var connectString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JS17.Db;Integrated Security=True";
 builder.Services.AddDbContext<WebDbContext>(x => x.UseSqlServer(connectString));
