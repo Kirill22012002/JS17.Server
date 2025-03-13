@@ -49,6 +49,7 @@ public class UserController : ControllerBase
         return Ok(token);
     }
 
+    [HttpGet]
     public IActionResult Login([FromQuery] string email, [FromQuery] string password)
     {
         if(!_dbContext.Users.Any(x => x.Email == email))
