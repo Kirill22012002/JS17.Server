@@ -10,22 +10,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JS17.Db;Integrated Security=True;";
+var connectString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JS17.Db;User ID=JSAdmin;Password=JSAdminPassword";
 builder.Services.AddDbContext<WebDbContext>(x => x.UseSqlServer(connectString));
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
-
 app.UseCors(option =>
 {
-    option.AllowAnyOrigin();
-    option.AllowAnyHeader();
-    option.AllowAnyMethod();
+option.AllowAnyOrigin();
+option.AllowAnyHeader();
+option.AllowAnyMethod();
 });
 
 app.UseCors(builder => builder.AllowAnyOrigin());
