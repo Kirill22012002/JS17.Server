@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     {
         if (_dbContext.Users.Any(x => x.Email == email))
         {
-            return BadRequest("User with this email already exist");
+            return BadRequest("user with this email already exist");
         }
 
         var user = new User
@@ -43,6 +43,33 @@ public class UserController : ControllerBase
 
         return Ok(token);
     }
+
+    [HttpGet]
+    public IActionResult Login([FromQuery] string email, [FromQuery] string password)
+    {
+        if(!_dbContext.Users.Any(x => x.Email == email))
+        {
+            return BadRequest("email or password not correct");
+        }
+
+        var user = _dbContext.Users.Single(x => x.Email == email);
+        var encryptPassword = Encryptdata(password);
+        if(encryptPassword != user.Password)
+        {
+            return BadRequest("email or password not correct");
+        }
+
+        var token = GenerateToken(email, password);
+        _dbContext.UserTokens.Add(new UserToken
+        {
+            User = user,
+            Token = token
+        });
+        _dbContext.SaveChanges();
+
+        return Ok(token);
+    }
+
 
     public static string GenerateToken(string email, string password)
     {
