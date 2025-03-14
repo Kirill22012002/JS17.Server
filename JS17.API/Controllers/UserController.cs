@@ -46,7 +46,7 @@ public class UserController : ControllerBase
         });
         _dbContext.SaveChanges();
 
-        return Ok(token);
+        return Ok(new RegisterResponseDto { Token = token });
     }
 
     [HttpGet]
@@ -72,7 +72,7 @@ public class UserController : ControllerBase
         });
         _dbContext.SaveChanges();
 
-        return Ok(token);
+        return Ok(new LoginResponseDto { Token = token });
     }
     
     [HttpGet]
