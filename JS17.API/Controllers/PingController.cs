@@ -5,14 +5,9 @@ namespace JS17.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class PingController : ControllerBase
+public class PingController : BaseController
 {
-    private readonly WebDbContext _dbContext;
-
-    public PingController(WebDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public PingController(WebDbContext dbContext) : base(dbContext) { }
 
     [HttpGet]
     public IActionResult PingServer()
@@ -24,7 +19,7 @@ public class PingController : ControllerBase
     public IActionResult PingSqlServer()
     {
         var success = _dbContext.Database.CanConnect();
-        if(success)
+        if (success)
         {
             return Ok("pong");
         }
