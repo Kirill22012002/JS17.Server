@@ -52,14 +52,14 @@ public class UserController : ControllerBase
     [HttpGet]
     public IActionResult Login([FromQuery] string email, [FromQuery] string password)
     {
-        if(!_dbContext.Users.Any(x => x.Email == email))
+        if (!_dbContext.Users.Any(x => x.Email == email))
         {
             return BadRequest("email or password not correct");
         }
 
         var user = _dbContext.Users.Single(x => x.Email == email);
         var encryptPassword = Encryptdata(password);
-        if(encryptPassword != user.Password)
+        if (encryptPassword != user.Password)
         {
             return BadRequest("email or password not correct");
         }
@@ -74,11 +74,11 @@ public class UserController : ControllerBase
 
         return Ok(new LoginResponseDto { Token = token });
     }
-    
+
     [HttpGet]
     public IActionResult GetProfile([FromQuery] string token)
     {
-        if(!_dbContext.UserTokens.Any(x => x.Token == token))
+        if (!_dbContext.UserTokens.Any(x => x.Token == token))
         {
             return BadRequest("token not valid");
         }

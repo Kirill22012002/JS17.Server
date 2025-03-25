@@ -24,7 +24,7 @@ public class PingController : ControllerBase
     public IActionResult PingSqlServer()
     {
         var success = _dbContext.Database.CanConnect();
-        if(success)
+        if (success)
         {
             return Ok("pong");
         }
